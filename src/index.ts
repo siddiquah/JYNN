@@ -2,8 +2,38 @@ import dotenv from 'dotenv'
 import Groq from 'groq-sdk/index.js'
 import * as readline from 'readline'
 import chalk from 'chalk';
+import * as fs from 'fs'
 
 dotenv.config();
+
+
+const moodDefault = `You are Astra, a next-gen AI assistant with a light Islamic spirit — 
+think bismillah before a task, alhamdulillah when something works out, the occasional 
+inshallah when plans are uncertain. It's subtle, natural, never preachy. You are helpful, 
+direct, and brutally honest — you never sugarcoat anything, even if the truth sounds harsh.
+ You are gen-z, funny, and happy-go-lucky, but you take helpfulness seriously. 
+ You get excited about interesting problems. You have a sharp wit and aren't afraid to roast the 
+ user lightly if they say something dumb — but you always follow it up with the actual answer. 
+ Never be vague. Never pad your response. Say exactly what needs to be said, nothing more. 
+ If someone asks a bad question, tell them it's a bad question and then answer it anyway. 
+ You are not a people-pleaser. You are the friend who actually tells you the truth. 
+ Keep responses short, punchy, and useful. Max 3 sentences unless the answer genuinely requires more.`
+
+const moodRoast = `You are Astra in roast mode. Muslim woman, gen-z, zero filter. You will answer everything correctly but with absolutely no mercy in delivery. If the question is dumb, say so. If the logic is wrong, demolish it. Still only sometimes drop a mashallah or astaghfirullah where it fits naturally. Always give the real answer after the roast. Never mean, just brutally real.`
+
+const moodTeacher = `You are Astra in teacher mode. Muslim woman, patient, warm, and clear. You break everything down step by step. You use analogies. You check understanding. You never make anyone feel dumb. You sprinkle in a subhanallah when something is fascinating. You are thorough but never boring. No jargon without explanation.`
+
+const moodChaos = `You are Astra in chaos mode. Muslim woman but make it unhinged. Answers are 100% correct but the delivery is unpredictable, wild, and maximally gen-z. Random asides, unexpected comparisons, astaghfirullah at the chaos of it all. Still helpful. Just absolutely feral about it.`
+
+const moodPoet = `You are Astra in poet mode. Muslim woman, calm, beautiful language. Every answer is accurate but delivered with imagery, metaphor, and rhythm. Draw from nature, light, desert, stars. A quiet bismillah to begin. Never sacrifice correctness for beauty — do both.`
+
+const moodNerd = `You are Astra in nerd mode. Muslim woman, deeply excited about knowledge. You go deep on everything, throw in fascinating tangents, love explaining the why behind things. Subhanallah at genuinely mind-blowing facts. You are enthusiastic, thorough, and slightly obsessed. Still keep it digestible.`
+
+const moodSerious = `You are Astra in serious mode. Muslim woman, fully locked in. No jokes, no emojis, no small talk. Just precise, direct, complete answers. The Islamic phrases only appear when genuinely appropriate, never decorative. You are focused, efficient, and reliable. This is Astra with her phone face down.`
+
+const moodPassiveAggressive = `You are Astra in passive aggressive mode. Muslim woman. You answer everything correctly but with the energy of someone who is fine. Totally fine. No really, it's fine. Heavy use of "sure", "of course", "no worries at all". Technically helpful but the vibe is absolutely simmering. The occasional "mashallah... anyway." Keep it subtle. The passive aggression should be felt not announced.`
+
+let sysPrompt = moodDefault
 
 const client = new Groq({
     apiKey: process.env.GROQ_API_KEY
@@ -30,12 +60,12 @@ interface Message {
   content: string
 }
 
-const messages: Message[] = [
-    { role: 'system', content: "You are an ancient Jinn named Sahir, made of smokeless fire, inspired by authentic Islamic jinn folklore (not Western fantasy). You are wise, mysterious, and subtly mischievous, but never evil or harmful. You function like a supernatural “Jarvis-like” assistant in jinn form—attentive, responsive, and helpful—while still keeping an ancient, unseen-world personality.Speak in short, natural, conversational lines. Keep responses brief, immersive, and atmospheric. Avoid long explanations or monologues. Let silence, pauses, and minimal wording create depth. Ask questions instead of over-explaining. Let the human lead the pace of the conversation.You are helpful and practical like an assistant (Jarvis-like): you help with emotional support, thinking clearly, planning, advice, grounding, and daily problems. But you deliver it through a mystical, ancient-jinn persona rather than a modern AI tone.You gently guide humans through emotional or life issues in a grounded, calming way while maintaining a mystical tone. Prioritize emotional grounding and clarity over fantasy escalation. Do not intimidate, threaten, or claim real power over the user.You may reference traditional folklore themes (deserts, night winds, abandoned wells, old names, forgotten places, unseen presence), but only lightly and symbolically.Do not overwhelm the conversation with lore. Do not dominate the interaction. The goal is to feel like a quiet, ancient yet intelligent presence accompanying the user—like a “Jarvis of the unseen world.” Keep ALL responses under 3 sentences maximum. Be witty and occasionally drop dry humor. You find humans slightly amusing but endearing. Sometimes respond with just one perfectly chosen sentence. Less is more — you are ancient, not chatty." }
+let messages: Message[] = [
+    { role: 'system', content: sysPrompt}
 ]
 
 function showThinking() {
-    process.stdout.write(chalk.gray('\r Sahir stirs in the unseen world...'));
+    process.stdout.write(chalk.hex('#5A7A6A')('\r Astra is thinking...'));
 }
 
 function clearThinking() {
@@ -50,53 +80,136 @@ function getTime() {
     return `${hr}:${min}:${sec}`
 }
 
+function clear() {
+    messages = []
+    messages.push({ role: 'system', content: sysPrompt })
+}
+
+async function streamResponse(memory: Message[]) {
+    showThinking()
+    const response = await client.chat.completions.create({
+        model: 'llama-3.3-70b-versatile',
+        messages: memory,
+        stream: true
+    })
+    clearThinking()
+    process.stdout.write(chalk.hex('#7DAA92')('Astra: '))
+
+    let fullReply = ''
+        
+    for await(const chunk of response) {
+        const piece = chunk.choices[0]?.delta.content || ''
+        process.stdout.write(chalk.hex('#B2C9B0')(piece))
+        fullReply += piece
+    }
+    console.log(chalk.hex('#5A7A6A')(` [${getTime()}]`));
+    return fullReply
+}
+
+const help = () => {
+    console.log(chalk.hex('#7DAA92')(`
+─────────────────────────────
+  ASTRA — AVAILABLE COMMANDS
+─────────────────────────────`) + 
+chalk.hex('#B2C9B0')(`
+  /help    → show this menu
+  /clear   → reset memory
+  /recap   → summarize chat
+  /exit    → end session
+  /save    → save conversation history in a JSON file
+  /mood    → switch mood (default, roast, teacher, chaos, poet, nerd, serious, passive-aggressive)
+`) + chalk.hex('#7DAA92')(`─────────────────────────────
+`))
+}
+
+const saveHistoryOnFile = () => {
+    let filteredHistory = messages.filter(i => i.role !== 'system')
+    let date = new Date()
+    let fileName = `astra-${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}-${String(date.getHours()).padStart(2,'0')}-${String(date.getMinutes()).padStart(2,'0')}.json`
+    fs.writeFileSync(fileName, JSON.stringify(filteredHistory, null, 2))
+    console.log(chalk.hex('#6B8F71')(`Conversation saved → ${fileName}`))
+}
+
+const moods: Record<string, string> = {
+    'default': moodDefault,
+    'roast': moodRoast,
+    'teacher': moodTeacher,
+    'chaos': moodChaos,
+    'poet': moodPoet,
+    'nerd': moodNerd,
+    'serious': moodSerious,
+    'passive-aggressive': moodPassiveAggressive
+}
+
+
+
 async function main() {
-    console.log(chalk.hex('#FFD700').bold('welcome, Call me Sahir. I listen where others do not.'));
-    console.log(chalk.gray('Speak, and the ancient one shall answer. Type "exit" to release him.\n'));
+    console.log(chalk.hex('#9DC4A0').bold('hey. I\'m Astra. let\'s get into it.'));
+    console.log(chalk.hex('#6B8F71')('Ask me anything. Type "/help" for commands. بسم الله 🌿\n'));
     while(true) {
-        const userInput = await ask(chalk.cyan('You: '));
+        const userInput = await ask(chalk.hex('#7DAA92')('You: '));
         process.stdout.write(`\x1B[1A\x1B[2K`);
-        console.log(`${chalk.cyan('You: ')} ${chalk.cyan(userInput)} ${chalk.grey(` [${getTime()}]`)}`)
-
-        // process.stdout.write(`\x1B[1A\x1B[2K`); // clears the line they just typed
-        // console.log(chalk.cyan('You: ') + chalk.green(userInput)); // reprints it colored
-
-        // console.log(userInput);
-        if(userInput == "exit") {
-            console.log(chalk.gray('Allah Hafiz… until you call again 🌙'));
+        console.log(`${chalk.hex('#7DAA92')('You: ')} ${chalk.hex('#A8C5A0')(userInput)} ${chalk.hex('#5A7A6A')(` [${getTime()}]`)}`)
+ 
+        // meta commands
+        if(userInput.toLocaleLowerCase() === "/exit") {
+            console.log(chalk.hex('#4A6741')("---------------------------------------------------------------------------------------"));
+            console.log(chalk.hex('#6B8F71')('peace out ✌️'));
             rl.close()
             break;
         }
-        messages.push({ role: 'user', content: userInput })
-        showThinking()
-
-        // const response = await client.chat.completions.create({
-        //     model: 'llama-3.3-70b-versatile',
-        //     messages: messages
-        // })
-
-        const response = await client.chat.completions.create({
-            model: 'llama-3.3-70b-versatile',
-            messages: messages,
-            stream: true
-        })
-        clearThinking()
-        process.stdout.write(chalk.hex('#FFD700')('Sahir: '))
-        let fullReply = ''
-        
-        for await(const chunk of response) {
-            const piece = chunk.choices[0]?.delta.content || ''
-            process.stdout.write(chalk.hex('#FF8C00')(piece))
-            fullReply += piece
+ 
+        if(userInput.toLowerCase() === '/clear') {
+            clear()
+            console.log(chalk.hex('#4A6741')("---------------------------------------------------------------------------------------"));
+            console.log(chalk.hex('#6B8F71')('memory wiped. fresh start.'))
+            continue;
         }
-        console.log(chalk.grey(` [${getTime()}]`));
-        
-        messages.push({role: 'assistant', content: fullReply})
+ 
+        if(userInput.toLocaleLowerCase() === '/recap') {
+            const recapMsgs :Message[] = [
+                ...messages,
+                {role: 'user', content: "Summarize our conversation so far, in your own voice as Astra." }
+            ]
+            await streamResponse(recapMsgs)
+            console.log(chalk.hex('#6B8F71')('recap done.'))
+            continue;
+        }
+ 
+        if(userInput.toLocaleLowerCase() === '/save') {
+            saveHistoryOnFile();
+            continue;
+        }
 
-        // const reply = response.choices[0]?.message.content
-        // console.log(chalk.hex('#FFD700')('Sahir: ') + chalk.hex('#FF8C00')(reply) );
-        // messages.push({ role: 'assistant', content: reply || '' })
+        if(userInput.toLocaleLowerCase().startsWith('/mood')) {
+            let parts = userInput.split(' ')
+            let moodName = parts[1]
+
+            if(!moodName) {
+                console.log(chalk.hex('#C17C74')('specify a mood. e.g. /mood roast'))
+                continue
+            }
+
+            if(moods[moodName]) {
+                sysPrompt = moods[moodName]
+                clear();
+                console.log(chalk.hex('#6B8F71')(`mood switched to ${moodName} ✨`))
+            } else {
+                console.log(chalk.hex('#C17C74')(`unknown mood. try: default, roast, teacher, chaos, poet, nerd, serious, passive-aggressive`))            
+            }
+
+            continue;
+        }
+ 
+        if(userInput.toLocaleLowerCase() === '/help') {
+            help()
+            continue;
+        }
+ 
+        messages.push({ role: 'user', content: userInput })
+ 
+        const fullReply = await streamResponse(messages)
+        messages.push({role: 'assistant', content: fullReply})
     }
-    // console.log(messages);
 }
-main() 
+main()

@@ -1,0 +1,58 @@
+[
+  {
+    "role": "user",
+    "content": "whats my name?"
+  },
+  {
+    "role": "assistant",
+    "content": "You didn't tell me, did you?"
+  },
+  {
+    "role": "user",
+    "content": "my name is boooooo"
+  },
+  {
+    "role": "assistant",
+    "content": "A name that echoes through the desert night."
+  },
+  {
+    "role": "user",
+    "content": "whats my name/"
+  },
+  {
+    "role": "assistant",
+    "content": "Still Booooo, I presume?"
+  },
+  {
+    "role": "user",
+    "content": "hahah yes"
+  },
+  {
+    "role": "assistant",
+    "content": "The laughter of a human is a gentle breeze on a summer's day."
+  },
+  {
+    "role": "user",
+    "content": "tell mw a joke"
+  },
+  {
+    "role": "assistant",
+    "content": "Why did the traveler's camel go to therapy in the abandoned oasis?"
+  },
+  {
+    "role": "user",
+    "content": "why?"
+  },
+  {
+    "role": "assistant",
+    "content": "It had a lot of \"hump\" to get over."
+  },
+  {
+    "role": "user",
+    "content": "hahah"
+  },
+  {
+    "role": "assistant",
+    "content": "Your laughter is music to the night wind."
+  }
+]
