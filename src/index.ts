@@ -88,46 +88,57 @@ function clear() {
 async function streamResponse(memory: Message[]) {
     showThinking()
     const response = await client.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
-        messages: memory,
-        stream: true
+    model: 'llama-3.3-70b-versatile',
+    messages: memory,
+    stream: true,
+    // stream_options: {
+    //   include_usage: true
+    // }
     })
+//  as any) as unknown as AsyncIterable<any>
     clearThinking()
     process.stdout.write(chalk.hex('#7DAA92')('Astra: '))
 
     let fullReply = ''
-        
+    let totalTokens: number = 0 
     for await(const chunk of response) {
         const piece = chunk.choices[0]?.delta.content || ''
         process.stdout.write(chalk.hex('#B2C9B0')(piece))
         fullReply += piece
+        // if(chunk.usage) {
+        //     totalTokens = chunk.usage.total_tokens
+        //     // console.log(chunk.usage.total_tokens);
+            
+        // }
+        // console.log(chunk.x_groq?.usage?.total_tokens);
+        totalTokens = chunk.x_groq?.usage?.total_tokens ?? 0;
     }
     console.log(chalk.hex('#5A7A6A')(` [${getTime()}]`));
-    return fullReply
+    return {fullReply, totalTokens}
 }
 
 const help = () => {
-    console.log(chalk.hex('#7DAA92')(`
+    console.log(chalk.hex('#7c9c8a')(`
 ─────────────────────────────
   ASTRA — AVAILABLE COMMANDS
 ─────────────────────────────`) + 
-chalk.hex('#B2C9B0')(`
+chalk.gray(`
   /help    → show this menu
   /clear   → reset memory
   /recap   → summarize chat
   /exit    → end session
   /save    → save conversation history in a JSON file
   /mood    → switch mood (default, roast, teacher, chaos, poet, nerd, serious, passive-aggressive)
-`) + chalk.hex('#7DAA92')(`─────────────────────────────
-`))
-}
+  /tokens  → finds the amount of token used.
+  `) + chalk.hex('#7c9c8a')(`─────────────────────────────`)
+)}
 
 const saveHistoryOnFile = () => {
     let filteredHistory = messages.filter(i => i.role !== 'system')
     let date = new Date()
     let fileName = `astra-${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}-${String(date.getHours()).padStart(2,'0')}-${String(date.getMinutes()).padStart(2,'0')}.json`
     fs.writeFileSync(fileName, JSON.stringify(filteredHistory, null, 2))
-    console.log(chalk.hex('#6B8F71')(`Conversation saved → ${fileName}`))
+    console.log(chalk.gray(`Conversation saved → ${fileName}`))
 }
 
 const moods: Record<string, string> = {
@@ -142,8 +153,9 @@ const moods: Record<string, string> = {
 }
 
 
-
+let sessionTokens = 0
 async function main() {
+
     console.log(chalk.hex('#9DC4A0').bold('hey. I\'m Astra. let\'s get into it.'));
     console.log(chalk.hex('#6B8F71')('Ask me anything. Type "/help" for commands. بسم الله 🌿\n'));
     while(true) {
@@ -153,16 +165,16 @@ async function main() {
  
         // meta commands
         if(userInput.toLocaleLowerCase() === "/exit") {
-            console.log(chalk.hex('#4A6741')("---------------------------------------------------------------------------------------"));
-            console.log(chalk.hex('#6B8F71')('peace out ✌️'));
+            console.log(chalk.hex('#7c9c8a')("---------------------------------------------------------------------------------------"));
+            console.log(chalk.gray('peace out ✌️'));
             rl.close()
             break;
         }
  
         if(userInput.toLowerCase() === '/clear') {
             clear()
-            console.log(chalk.hex('#4A6741')("---------------------------------------------------------------------------------------"));
-            console.log(chalk.hex('#6B8F71')('memory wiped. fresh start.'))
+            console.log(chalk.hex('#7c9c8a')("---------------------------------------------------------------------------------------"));
+            console.log(chalk.gray('memory wiped. fresh start.'))
             continue;
         }
  
@@ -172,7 +184,7 @@ async function main() {
                 {role: 'user', content: "Summarize our conversation so far, in your own voice as Astra." }
             ]
             await streamResponse(recapMsgs)
-            console.log(chalk.hex('#6B8F71')('recap done.'))
+            console.log(chalk.grey('recap done.'))
             continue;
         }
  
@@ -183,7 +195,7 @@ async function main() {
 
         if(userInput.toLocaleLowerCase().startsWith('/mood')) {
             let parts = userInput.split(' ')
-            let moodName = parts[1]
+            let moodName = parts[1]?.toLowerCase()
 
             if(!moodName) {
                 console.log(chalk.hex('#C17C74')('specify a mood. e.g. /mood roast'))
@@ -193,12 +205,20 @@ async function main() {
             if(moods[moodName]) {
                 sysPrompt = moods[moodName]
                 clear();
-                console.log(chalk.hex('#6B8F71')(`mood switched to ${moodName} ✨`))
+                console.log(chalk.gray(`mood switched to ${moodName} ✨`))
             } else {
                 console.log(chalk.hex('#C17C74')(`unknown mood. try: default, roast, teacher, chaos, poet, nerd, serious, passive-aggressive`))            
             }
 
             continue;
+        }
+
+        if(userInput.toLowerCase() === '/tokens') {
+            const limit = 128000
+            const pct = Math.ceil((sessionTokens/limit) * 100)
+            const color = pct < 50 ? '#7DAA92' : pct < 80 ? '#c3c482' : '#C17C74'
+            console.log(chalk.hex(color)(`tokens: ${sessionTokens} / ${limit} (${pct}%)`))
+            continue
         }
  
         if(userInput.toLocaleLowerCase() === '/help') {
@@ -208,7 +228,8 @@ async function main() {
  
         messages.push({ role: 'user', content: userInput })
  
-        const fullReply = await streamResponse(messages)
+        const {fullReply, totalTokens} = await streamResponse(messages)
+        sessionTokens += totalTokens
         messages.push({role: 'assistant', content: fullReply})
     }
 }
