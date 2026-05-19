@@ -31,26 +31,7 @@ A terminal-based AI assistant built with TypeScript and Node.js. Streams respons
 - Thinking indicator during API calls
 - Save conversations to timestamped JSON files
 - Conversation recap via AI summarization
-
----
-
-## Setup
-
-```bash
-git clone https://github.com/yourusername/astra
-cd astra
-npm install
-```
-
-Create a `.env` file:
-```
-GROQ_API_KEY=your_key_here
-```
-
-Run:
-```bash
-npm start
-```
+- Keeps count of the amount of tokens used.
 
 ---
 
@@ -63,6 +44,7 @@ npm start
 | `/recap` | AI summarizes the conversation so far |
 | `/save` | export conversation to a timestamped JSON file |
 | `/mood <name>` | switch Astra's personality |
+| `/tokens` | finds amount of used tokens |
 | `/exit` | end the session |
 
 ---
