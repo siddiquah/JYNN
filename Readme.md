@@ -1,4 +1,3 @@
-````md
 # ASTRA
 
 <p align="center">
@@ -6,56 +5,23 @@
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=24&duration=3000&pause=1000&color=67E8F9&center=true&vCenter=true&width=1000&lines=Your+Terminal+Companion.;Smart.+Sassy.+Terminal-native.;Streaming+AI+responses.;Mood-driven+personalities.;Powered+by+LLaMA+3.3+70B.;Built+for+late-night+coding+sessions." />
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=20&duration=3000&pause=1000&color=A78BFA&center=true&vCenter=true&width=1000&lines=Your+Terminal+Companion.;Smart.+Direct.+Terminal-native.;Streaming+AI+responses.;8+Mood-driven+personalities.;Powered+by+LLaMA+3.3+70B.;Built+for+the+command+line." />
 </p>
 
 <p align="center">
-  <b>A terminal-native AI companion with personality, streaming responses, memory, and chaotic late-night energy.</b>
+  A terminal-native AI assistant with real personality, streaming responses, session memory, and 8 switchable moods.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/stars/siddiquah/JYNN?style=for-the-badge&color=38BDF8" />
-  <img src="https://img.shields.io/github/last-commit/siddiquah/JYNN?style=for-the-badge&color=7C3AED" />
-  <img src="https://img.shields.io/github/languages/top/siddiquah/JYNN?style=for-the-badge&color=06B6D4" />
-  <img src="https://img.shields.io/github/repo-size/siddiquah/JYNN?style=for-the-badge&color=2563EB" />
+  <img src="https://img.shields.io/github/stars/siddiquah/JYNN?style=for-the-badge&color=7C3AED" />
+  <img src="https://img.shields.io/github/last-commit/siddiquah/JYNN?style=for-the-badge&color=4F46E5" />
+  <img src="https://img.shields.io/github/languages/top/siddiquah/JYNN?style=for-the-badge&color=818CF8" />
+  <img src="https://img.shields.io/github/repo-size/siddiquah/JYNN?style=for-the-badge&color=6D28D9" />
 </p>
 
 ---
 
-# ✨ What is Astra?
-
-Astra is an AI-powered terminal companion designed to make the command line feel alive.
-
-Most terminal AI tools feel:
-- robotic
-- corporate
-- productivity obsessed
-- emotionally dead
-
-Astra doesn’t.
-
-She feels like:
-- a witty late-night coding partner
-- an AI with an actual personality
-- a terminal-native companion
-- someone sitting beside you at 2AM while your code breaks for the fifth time
-
-She can be:
-- funny
-- chaotic
-- brutally honest
-- patient
-- cinematic
-- passive aggressive for no reason whatsoever
-
-But underneath all of that —
-she’s genuinely useful.
-
-Built in just **4 days** as an experiment to explore what an AI assistant inside the terminal could actually feel like.
-
----
-
-# 🎥 Demo
+## 🎥 Demo
 
 <p align="center">
   <img src="./assets/astra-demo-gif.gif" width="100%" />
@@ -63,141 +29,94 @@ Built in just **4 days** as an experiment to explore what an AI assistant inside
 
 ---
 
-# ⚡ Features
+## ✨ What is Astra?
 
-## 🌊 Streaming Responses
-Astra streams responses token-by-token in real time, making conversations feel alive instead of static.
+Astra is an AI assistant that lives in your terminal. Not a web app. Not a browser tab. Your terminal.
 
----
+Built because most AI tools feel robotic, corporate, and emotionally dead. Astra doesn't. She has opinions, she'll roast you when you deserve it, and she's genuinely useful underneath all of it.
 
-## 🎭 Dynamic Personality Modes
+She's a Muslim gen-z AI with a light Islamic spirit — bismillah before a task, alhamdulillah when something works, inshallah when plans are uncertain. Subtle, never preachy.
 
-Switch Astra’s entire personality instantly:
-
-| Mood | Personality |
-|------|-------------|
-| `default` | Balanced Astra experience |
-| `roast` | Helpful, but ruthless |
-| `teacher` | Patient and step-by-step |
-| `chaos` | Completely unhinged energy |
-| `poet` | Cinematic and expressive |
-| `nerd` | Obsessed with knowledge |
-| `serious` | Locked in. Zero nonsense |
-| `passive-aggressive` | Technically helpful. Emotionally questionable |
+Built in 4 days as an experiment in what terminal AI could actually feel like.
 
 ---
 
-## 🧠 Session Memory
-Astra remembers the current conversation during runtime.
+## ⚡ Features
+
+### 🌊 Streaming Responses
+Token-by-token streaming via Groq's API. Responses feel alive, not dumped.
+
+### 🎭 8 Switchable Moods
+Switch Astra's entire personality mid-conversation with `/mood`.
+
+| Mood | Vibe |
+|------|------|
+| `default` | Gen-z, funny, brutally honest |
+| `roast` | Zero filter. Still helpful |
+| `teacher` | Patient, step-by-step, clear |
+| `chaos` | Completely unhinged. Correct |
+| `poet` | Beautiful language, accurate |
+| `nerd` | Deep dives, excited about everything |
+| `serious` | Locked in. No jokes |
+| `passive-aggressive` | Fine. Totally fine |
+
+### 🧠 Session Memory
+Astra remembers the full conversation during runtime. Context is sent with every message.
+
+### 📊 Token Counter
+Track real token usage against the 128k context limit with `/tokens`. Color-coded by usage level.
+
+### 💾 Save Conversations
+Export chats to timestamped JSON files with `/save`.
+
+### 🔄 Conversation Recap
+Ask Astra to summarize the session so far in her own voice with `/recap`.
 
 ---
 
-## 💾 Save Conversations
-Export entire chats into structured JSON files using:
+## 📸 Screenshots
 
-```bash
-/save
-```
-
----
-
-## 🎨 Beautiful Terminal UI
-
-Designed around:
-- deep blues
-- neon cyan
-- soft purple
-- hacker-style terminal aesthetics
-
-Includes:
-- animated startup screen
-- gradient ASCII logo
-- styled prompts
-- timestamps
-- clean spacing
-- cinematic CLI feel
-
----
-
-## 🔥 Powered by Meta LLaMA 3.3 70B
-
-Astra uses:
-
-- **Meta LLaMA 3.3 70B**
-- via the **Groq API**
-
-which enables:
-- fast inference
-- real-time streaming
-- responsive terminal interaction
-
----
-
-# 📸 Screenshots
-
-## 🌌 Welcome Screen
-
+### Welcome Screen
 ![](./assets/welcome.png)
 
----
-
-## 🎭 Mood Switching
-
+### Mood Switching
 ![](./assets/mood.png)
 
----
-
-## 🧠 Memory System
-
+### Memory System
 ![](./assets/memory.png)
 
----
-
-## 📜 Help Menu
-
+### Help Menu
 ![](./assets/help.png)
 
----
-
-## 💾 Tokens + Save + Exit
-
+### Tokens + Save + Exit
 ![](./assets/tokens-save-exit.png)
 
 ---
 
-# 📦 Installation
+## 📦 Installation
 
-## 1. Clone the repository
+### 1. Clone the repo
 
 ```bash
 git clone https://github.com/siddiquah/JYNN.git
-
 cd JYNN
 ```
 
----
-
-## 2. Install dependencies
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
----
-
-## 3. Create a `.env` file
+### 3. Create a `.env` file
 
 ```env
 GROQ_API_KEY=your_api_key_here
 ```
 
-Get your Groq API key from:
+Get your free Groq API key at [console.groq.com](https://console.groq.com)
 
-https://console.groq.com
-
----
-
-## 4. Start Astra
+### 4. Run
 
 ```bash
 npm start
@@ -205,42 +124,39 @@ npm start
 
 ---
 
-# 🧪 Commands
+## 🧪 Slash Commands
 
-```bash
-/help      show available commands
-/mood      switch Astra personality
-/save      archive conversation
-/recap     summarize session
-/clear     wipe memory
-/tokens    show token usage
-/exit      leave the void
-```
+| Command | Description |
+|---------|-------------|
+| `/help` | show available commands |
+| `/mood <name>` | switch personality |
+| `/recap` | AI summarizes the conversation |
+| `/save` | export chat to JSON |
+| `/clear` | wipe session memory |
+| `/tokens` | show token usage |
+| `/exit` | end the session |
 
 ---
 
-# 🏗️ Project Structure
+## 🏗️ Project Structure
 
-```txt
+```
 src/
 ├── commands/
 │   ├── clear.ts
 │   ├── help.ts
+│   ├── index.ts
 │   ├── mood.ts
 │   ├── recap.ts
 │   ├── save.ts
 │   └── tokens.ts
-│
 ├── core/
 │   └── stream.ts
-│
 ├── moods/
 │   └── prompts.ts
-│
 ├── utils/
 │   ├── terminal.ts
 │   └── time.ts
-│
 ├── config.ts
 ├── main.ts
 ├── types.ts
@@ -249,69 +165,46 @@ src/
 
 ---
 
-# ⚙️ Tech Stack
+## ⚙️ Tech Stack
 
-- TypeScript
-- Node.js
-- Chalk
-- Gradient String
-- Readline
-- Groq API
-- Meta LLaMA 3.3 70B
-
----
-
-# 🌌 Philosophy
-
-Most AI tools try to replace the terminal.
-
-Astra tries to belong inside it.
-
-The command line is still one of the fastest, most personal interfaces developers use —
-Astra simply adds:
-- personality
-- memory
-- humor
-- conversation
-- presence
-
-Because coding feels different when your terminal talks back.
+| Layer | Tool |
+|-------|------|
+| Language | TypeScript |
+| Runtime | Node.js |
+| AI Model | LLaMA 3.3 70B Versatile |
+| API | Groq |
+| Terminal UI | Chalk |
+| Input | Readline |
 
 ---
 
-# 🛣️ Roadmap
+## 🛣️ Roadmap
 
 - [ ] Persistent memory across sessions
-- [ ] Plugin system
+- [ ] Voice input via Groq Whisper API
+- [ ] Code syntax highlighting in terminal
+- [ ] `npx astra` global install
 - [ ] Local model support
-- [ ] Shell execution mode
-- [ ] Voice interaction
-- [ ] Themes
 - [ ] Multi-agent workflows
-- [ ] `npx astra-cli`
 
 ---
 
-# 🤝 Contributing
+## 🌌 About
 
-Contributions, experiments, ideas, and chaos are welcome.
+Built this because I wanted an AI I could actually talk to while coding — not a generic chatbot, but something with a real personality that doesn't sugarcoat things or waste your time. Most AI tools feel like filling out a form. Astra feels like texting a friend who happens to know everything.
 
-If you have suggestions:
-- open an issue
-- fork the project
-- build something weird
+Started with zero knowledge of AI APIs, TypeScript, or how any of this works. Figured it out from scratch — streaming responses, conversation memory, terminal UI, modular architecture. The whole thing.
+
+It's a CLI because that's where I live when I'm building. No browser tab, no context switching. Just you, your terminal, and Astra.
 
 ---
 
-# ⭐ Support
+## 🤝 Contributing
 
-If Astra made you smile, consider starring the repository.
-
-It genuinely helps a lot.
+Contributions, ideas, and chaos are welcome. Open an issue or fork and build something weird.
 
 ---
 
 <p align="center">
-  built with caffeine, insomnia, and terminal chaos.
+  built with caffeine, curiosity, and the command line. بسم الله 🌿
 </p>
-````
