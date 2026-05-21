@@ -2,13 +2,23 @@ export const MODEL = 'llama-3.3-70b-versatile'
 export const TOKEN_LIMIT = 128000
 
 export const COLORS = {
-    primary: '#7DAA92',    // Astra label, borders
-    text: '#B2C9B0',       // Astra reply text
-    dim: '#5A7A6A',        // timestamps, thinking
-    warning: '#C4A882',    // warnings
-    error: '#C17C74',      // errors
-    border: '#7c9c8a',     // dividers
-    user: '#A8C5A0',       // user input text
-    success: '#6B8F71',    // confirmations
-    welcome: '#9DC4A0'     // welcome message
+
+    // Main Astra identity
+    primary: '#38BDF8',      // cyan-blue
+    text: '#C4E7FF',         // soft icy blue
+
+    // Secondary UI
+    dim: '#5B7C99',          // muted steel blue
+    border: '#1E3A8A',       // deep royal blue
+
+    // User interaction
+    user: '#A78BFA',         // soft purple
+    success: '#22C55E',      // clean neon green
+
+    // Status colors
+    warning: '#FBBF24',      // amber
+    error: '#F87171',        // soft red
+
+    // Welcome / branding
+    welcome: '#67E8F9'       // glowing cyan
 }

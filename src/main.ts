@@ -6,53 +6,77 @@ import { ask, rl } from './utils/terminal';
 import { getTime } from './utils/time';
 import { help, clear, saveHistoryOnFile, recapHistory, switchMood, showTokens } from './commands';
 import { streamResponse } from './core/stream';
-
+import gradient from "gradient-string";
 
 let sysPrompt = moodDefault
 let messages: Message[] = [{ role: 'system', content: sysPrompt}]
 let sessionTokens = 0 //session lifetime tokens.
 
 export async function main() {
+    console.log(
+  gradient([
+    "#01164b", // deep navy
+    "#1e3a8a", // royal blue
+    "#2563eb", // vibrant blue
+    "#06b6d4", // cyan glow
+    "#7c3aed"  // soft purple
+  ]).multiline(`
+   ____       .-'''-. ,---------. .-------.       ____     
+ .'  __ \`.   / _     \\\\          \\|  _ _   \\    .'  __ \`.  
+/   '  \\  \\ (\`' )/\`--' \`--.  ,---'| ( ' )  |   /   '  \\  \\ 
+|___|  /  |(_ o _).       |   \\   |(_ o _) /   |___|  /  | 
+   _.-\`   | (_,_). '.     :_ _:   | (_,_).' __    _.-\`   | 
+.'   _    |.---.  \\  :    (_I_)   |  |\\ \\  |  |.'   _    | 
+|  _( )_  |\\    \`-'  |   (_(=)_)  |  | \\ \`'   /|  _( )_  | 
+\\ (_ o _) / \\       /     (_I_)   |  |  \\    / \\ (_ o _) / 
+ '.(_,_).'   \`-...-'      '---'   ''-'   \`'-'   '.(_,_).'  
 
-    console.log(chalk.hex(COLORS.welcome).bold('hey. I\'m Astra. let\'s get into it.'));
-    console.log(chalk.hex(COLORS.success)('Ask me anything. Type "/help" for commands. بسم الله 🌿\n'));
+                  Your Terminal Companion
+                Smart. Sassy. Terminal-native
+`)
+);
+
+    console.log( chalk.hex(COLORS.welcome)( "streaming thoughts directly into your terminal.\n" ) ); 
+    console.log( chalk.hex(COLORS.dim)( "type /help if you forgot how this works. happens to the best of us.\n" ) );
+
     while(true) {
-        const userInput = await ask(chalk.hex(COLORS.primary)('You: '));
+        const userInput = await ask(chalk.hex(COLORS.primary)('You ❯ '));
         process.stdout.write(`\x1B[1A\x1B[2K`);
-        console.log(`${chalk.hex(COLORS.primary)('You: ')} ${chalk.hex(COLORS.user)(userInput)} ${chalk.hex(COLORS.dim)(` [${getTime()}]`)}`)
- 
+        console.log(`${chalk.hex(COLORS.primary)("you ❯")} ${chalk.hex(COLORS.user)(userInput)} ${chalk.hex(COLORS.dim)(`[${getTime()}]`)}`)
+        
+        const normalizedInput = userInput.toLowerCase().trim();
         // slash commands
-        if(userInput.toLocaleLowerCase() === "/exit") {
+        if(normalizedInput.toLocaleLowerCase() === "/exit") {
             console.log(chalk.hex(COLORS.border)("---------------------------------------------------------------------------------------"));
             console.log(chalk.hex(COLORS.welcome)('peace out ✌️'));
             rl.close()
             break;
         }
-        if(userInput.toLowerCase() === '/clear') {
+        if(normalizedInput.toLowerCase() === '/clear') {
             clear(messages, sysPrompt)
             console.log(chalk.hex(COLORS.border)("---------------------------------------------------------------------------------------"));
             console.log(chalk.hex(COLORS.dim)('memory wiped. fresh start.'))
             continue;
         }
-        if(userInput.toLocaleLowerCase() === '/recap') {
-            await recapHistory(messages)
+        if(normalizedInput.toLocaleLowerCase() === '/recap') {
+            await recapHistory(messages) 
             continue;
         }
-        if(userInput.toLocaleLowerCase() === '/save') {
+        if(normalizedInput.toLocaleLowerCase() === '/save') {
             saveHistoryOnFile(messages);
             continue;
         }
-        if(userInput.toLocaleLowerCase().startsWith('/mood')) {
+        if(normalizedInput.toLocaleLowerCase().startsWith('/mood')) {
             let parts = userInput.split(' ')
-            let moodName = parts[1]?.toLowerCase() ?? ''
+            let moodName = parts[1] ?? ''
             sysPrompt = switchMood(messages, sysPrompt, moodName)
             continue;
         }
-        if(userInput.toLowerCase() === '/tokens') {
+        if(normalizedInput.toLowerCase() === '/tokens') {
             showTokens(sessionTokens)
             continue
         }
-        if(userInput.toLocaleLowerCase() === '/help') {
+        if(normalizedInput.toLocaleLowerCase() === '/help') {
             help()
             continue;
         }
@@ -62,5 +86,6 @@ export async function main() {
         const {fullReply, totalTokens} = await streamResponse(messages)
         sessionTokens += totalTokens
         messages.push({role: 'assistant', content: fullReply})
+        console.log();
     }
 }

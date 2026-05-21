@@ -14,7 +14,7 @@ export function switchMood(hisArray: Message[], sysPro: string, moodName: string
     if(moods[moodName]) {
         sysPro = moods[moodName]
         clear(hisArray, sysPro);
-        console.log(chalk.hex(COLORS.success)(`mood switched to ${moodName} ✨`))
+        console.log(chalk.hex(COLORS.success)(`astra personality switched → ${moodName} ✨`))
     } else {
         console.log(chalk.hex(COLORS.error)(`unknown mood. try: default, roast, teacher, chaos, poet, nerd, serious, passive-aggressive`))            
     }
